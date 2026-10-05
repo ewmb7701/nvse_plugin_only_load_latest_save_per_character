@@ -1,0 +1,4 @@
+LIBRARY only_load_latest_save_per_character
+EXPORTS
+    NVSEPlugin_Query
+    NVSEPlugin_Load

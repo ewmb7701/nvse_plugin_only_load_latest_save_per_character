@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32"><Configuration>Debug</Configuration><Platform>Win32</Platform></ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32"><Configuration>Release</Configuration><Platform>Win32</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6BEB6034-B66C-46F1-8575-9B535E6929BC}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>nvse_plugin_only_load_latest_save_per_character</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType Condition="'$(GuardTests)'!='true'">DynamicLibrary</ConfigurationType>
+    <ConfigurationType Condition="'$(GuardTests)'=='true'">Application</ConfigurationType>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <OutDir>$(ProjectDir)..\target\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\target\$(Configuration)\obj\$(ProjectName)\</IntDir>
+    <TargetName>only_load_latest_save_per_character</TargetName>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(GuardTests)'=='true'">
+    <TargetName>only_load_latest_save_per_character_tests</TargetName>
+    <OutDir>$(ProjectDir)..\target\$(Configuration)\tests\</OutDir>
+    <IntDir>$(ProjectDir)..\target\$(Configuration)\tests\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <Optimization Condition="'$(Configuration)'=='Debug'">Disabled</Optimization>
+      <Optimization Condition="'$(Configuration)'=='Release'">MaxSpeed</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <ModuleDefinitionFile Condition="'$(GuardTests)'!='true'">$(ProjectDir)exports.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem Condition="'$(GuardTests)'!='true'">Windows</SubSystem>
+      <SubSystem Condition="'$(GuardTests)'=='true'">Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <BaseAddress Condition="'$(GuardTests)'=='true'">0x00400000</BaseAddress>
+      <RandomizedBaseAddress Condition="'$(GuardTests)'=='true'">false</RandomizedBaseAddress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(GuardTests)'!='true'">
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="load_guard.cpp" />
+    <ClCompile Include="load_policy.cpp" />
+    <ClCompile Include="row_appearance.cpp" />
+    <ClCompile Include="log.cpp" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(GuardTests)'=='true'">
+    <ClCompile Include="..\tests\integration.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
